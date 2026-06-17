@@ -63,7 +63,7 @@ def _final_text(content):
     return "\n".join(block.text for block in content if block.type == "text").strip()
 
 
-def run_agent(topic, feedback=None):
+def run_agent(topic, feedback=None, system_prompt=None):
     """
     Run ONE agent loop on a research topic and return the result.
 
@@ -75,6 +75,10 @@ def run_agent(topic, feedback=None):
         topic: The research question, e.g. "What is an agentic loop?"
         feedback: Optional grader feedback from a previous failed attempt
             (Level 2 passes this in to make the agent try again, better).
+        system_prompt: Optional override for the agent's system prompt. Defaults
+            to RESEARCH_AGENT_SYSTEM_PROMPT. This is what lets you A/B test a
+            Level 4 *improved* prompt against the current one without editing
+            prompts.py — see hill_climb_experiment.py.
 
     Returns:
         An AgentResult with the final summary, the full message log, and the
@@ -92,6 +96,9 @@ def run_agent(topic, feedback=None):
     else:
         user_text = f"Research this topic and write a summary: {topic}"
 
+    # Use the override if given, else the standard research prompt.
+    system = system_prompt or RESEARCH_AGENT_SYSTEM_PROMPT
+
     messages = [{"role": "user", "content": user_text}]
     iterations = 0
 
@@ -105,7 +112,7 @@ def run_agent(topic, feedback=None):
         print("[AGENT] Asking the model what to do next...")
 
         message = llm.create_message(
-            system=RESEARCH_AGENT_SYSTEM_PROMPT,
+            system=system,
             messages=messages,
             tools=TOOL_DEFINITIONS,
         )

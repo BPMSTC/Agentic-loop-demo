@@ -87,6 +87,19 @@ The demo *suggests* a better prompt but stops there. Have students finish it
 5. Discuss: *who* should be allowed to approve a prompt change in a real system,
    and what could go wrong if this were fully automated?
 
+**Want the before/after measured for you?** Run the A/B harness instead of (or
+alongside) the manual paste:
+
+```bash
+python hill_climb_experiment.py --runs 6
+```
+
+It runs the agent repeatedly with the current prompt and with the latest
+improved prompt, then reports the average iteration count for each. In our
+testing the improved prompt cut iterations ~15-20% by curbing over-searching —
+a small but real climb. Good discussion point: the effect is modest and noisy,
+which is exactly why a human reviews the suggestion rather than auto-deploying it.
+
 ---
 
 ## Discussion questions (these are the hard ones)

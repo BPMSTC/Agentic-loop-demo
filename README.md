@@ -11,6 +11,9 @@ that loop without reading the others.
 > **Teaching from this repo?** See [`INSTRUCTOR_GUIDE.md`](INSTRUCTOR_GUIDE.md)
 > for a classroom flow, per-level talking points, discussion questions, and a
 > hands-on exercise that closes the hill-climbing loop.
+>
+> **Just want the commands?** [`TESTING.md`](TESTING.md) is the full command
+> reference — setup, every run mode, the file-watcher, and the hill-climbing A/B test.
 
 | Level | Loop | What it adds | File |
 |------:|------|--------------|------|
@@ -94,6 +97,9 @@ run_demo.py          Orchestrates all four levels with narration.
   +-- level2_verification.py .. run_verified_agent()  wraps level 1 with a grader
   +-- level3_event.py ......... watches watch_inbox/, fires level 2 on new files
   +-- level4_hill_climbing.py . reads traces/, proposes a better prompt
+
+hill_climb_experiment.py ..... A/B test: does the L4 suggestion actually help?
+                               (averages iteration counts, current vs improved)
 
 Shared building blocks:
   llm.py ..... one model call for every level; also the mock-mode brain
