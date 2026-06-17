@@ -117,7 +117,9 @@ def main():
     # LEVEL 3 — event-driven loop
     # ===================================================================
     banner("LEVEL 3 — THE EVENT-DRIVEN LOOP")
-    print("Watch a folder. Dropping a file in fires the whole verified agent.\n")
+    print("Watch a folder. Dropping a file in fires the whole verified agent.")
+    print("(The file-drop is a stand-in for a webhook, a cron tick, or a queue —")
+    print(" any system event that should trigger the agent without a human.)\n")
 
     observer = level3_event.start_observer()
     print(f"[EVENT] Watching {os.path.relpath(level3_event.WATCH_INBOX)} ...")
@@ -163,7 +165,14 @@ def main():
     print("    L2 ensures quality")
     print("    L3 runs on events, at scale")
     print("    L4 improves the system over time")
+    print()
+    print("  The article's punchline: the real leverage is in loops 3 and 4, where")
+    print("  value COMPOUNDS — agents embedded in your systems that keep getting")
+    print("  better from their own traces. Loops 1-2 are table stakes.")
+    print()
     print("  Look in traces/ and improved_prompts/ to see what the run produced.")
+    print("  Next: review the L4 suggestion, apply it to prompts.py, and re-run to")
+    print("  close the hill-climbing loop yourself. (See INSTRUCTOR_GUIDE.md.)")
     print("=" * 70)
 
 

@@ -13,9 +13,21 @@ Concept:
     research agent. The agent's own behavior becomes the training signal — each
     generation of runs can make the next one better.
 
+    The KEY MOVE (from the article): the improvement doesn't just loop back to the
+    top — it reaches INSIDE and updates the agent loop's own configuration. Here
+    that config is the system prompt. But the prompt is only the SIMPLEST thing to
+    improve. The same trace signal could be used to tweak the tools, sharpen the
+    grader's rubric, improve the agent's memory or retrieved skills, or — for
+    open-weight models — feed RL fine-tuning, using trace/eval outcomes as the
+    training signal. The loop is the pattern; what it optimizes is up to you.
+
     IMPORTANT: this does NOT overwrite prompts.py automatically. It writes the
-    suggestion to improved_prompts/ and leaves the decision to a human. That
-    "human in the loop" before deploying a change is the point, not an oversight.
+    suggestion to improved_prompts/ and leaves the decision to a human (oversight
+    touch point #4: harness changes flow through human review before deploy).
+    To CLOSE the loop and actually "climb," a person reviews the suggestion,
+    pastes the good parts into prompts.py, and re-runs — then the next batch of
+    traces should show fewer failures. That hand-application is a great student
+    exercise (see INSTRUCTOR_GUIDE.md).
 
 Self-contained: run it after you've generated some traces (run Level 1/2/3, or
 the full run_demo.py) and then:

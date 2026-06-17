@@ -61,6 +61,12 @@ def handle_topic_file(path):
     # Fire the full Level 2 pipeline (agent loop + grading) on the topic.
     result = run_verified_agent(topic)
 
+    # HUMAN IN THE LOOP (oversight touch point #3): in a real system this is the
+    # "application loop" boundary — where output goes back to an end user or a
+    # live system. For sensitive results you'd route the answer to a person for
+    # approval BEFORE publishing it, instead of writing it out automatically as
+    # we do here.
+
     # Write the answer beside the input: topic.txt -> topic.summary.txt
     base, _ = os.path.splitext(path)
     summary_path = base + ".summary.txt"

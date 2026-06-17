@@ -124,6 +124,12 @@ def run_agent(topic, feedback=None):
             return AgentResult(summary=summary, messages=messages, iterations=iterations)
 
         # Otherwise: run every tool the model asked for, collect the results.
+        #
+        # HUMAN IN THE LOOP (oversight touch point #1): this is the spot where a
+        # production agent would PAUSE and ask a person to approve a sensitive
+        # action before running it — sending money, deleting a row, opening a PR.
+        # Our tools (search, read_file) are read-only and safe, so we just run
+        # them. Whenever a tool can change the real world, gate it here.
         tool_results = []
         for tool_use in tool_uses:
             print(f"[TOOL]  Model called '{tool_use.name}' with {tool_use.input}")

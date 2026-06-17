@@ -12,7 +12,27 @@ Concept:
     feedback back to the agent and let it try again. This separates *finishing*
     from *quality*.
 
-    The grader here is "LLM as a judge": we ask the model to evaluate the model.
+    Two kinds of grader (the article names both):
+      * DETERMINISTIC — plain code: run the tests, check the links resolve, check
+        the diff is scoped. Cheap, fast, and not itself fallible. Prefer this
+        whenever the quality bar can be expressed as a check.
+      * AGENTIC ("LLM as a judge") — a second model call scores the output. Use
+        it for fuzzy qualities (clarity, tone) that code can't easily measure.
+        Caveat: a model grading a model can share the same blind spots, so keep
+        the rubric strict and, for anything that matters, add a human (below).
+
+    This demo uses the agentic kind because "LLM as a judge" is the idea worth
+    teaching here. (Fun fact: in mock mode our grader is actually deterministic —
+    it fails short/vague summaries by a simple rule — which is a perfect example
+    of the first kind.)
+
+    TRADEOFF: every verification pass is another model call, so it adds latency
+    and cost. Worth it whenever quality matters more than speed — which, per the
+    article, is most production use cases.
+
+    HUMAN IN THE LOOP (oversight touch point #2): for sensitive workflows a human
+    can BE the grader, or approve the agentic grader's verdict, instead of
+    trusting the model. grade_summary() is exactly where that swap would happen.
 
 Self-contained: run it directly to watch an agent get graded and (if needed)
 sent back to improve:
