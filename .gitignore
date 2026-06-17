@@ -1,0 +1,18 @@
+# Secrets — never commit your real key
+.env
+
+# Editor / harness local settings
+.claude/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# Demo artifacts generated at runtime (the folders are kept via .gitkeep)
+traces/*.json
+improved_prompts/*.txt
+watch_inbox/*.txt
+watch_inbox/*.summary.txt
