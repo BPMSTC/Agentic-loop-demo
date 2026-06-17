@@ -1,0 +1,31 @@
+name: CI
+
+# Tiny smoke check: the demo must import, compile, and run end-to-end in mock
+# mode (no API key, fully offline, deterministic). This catches syntax errors
+# and broken wiring on every push/PR without needing any secrets.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Byte-compile all modules
+        run: python -m py_compile *.py
+
+      - name: Run the full demo in mock mode (no API key)
+        run: python run_demo.py --mock -y

@@ -1,5 +1,8 @@
 # Agentic Loop Demo
 
+[![CI](https://github.com/BPMSTC/Agentic-loop-demo/actions/workflows/ci.yml/badge.svg)](https://github.com/BPMSTC/Agentic-loop-demo/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 A hands-on teaching demo that builds up an AI agent in **four stages**, one loop
 at a time, based on Sydney Runkle's *"The Art of Loop Engineering."* You run it
 from the terminal and watch each loop execute with clear, narrated output.
@@ -339,6 +342,10 @@ See [`TESTING.md`](TESTING.md) for maintainer sanity checks (compile, secret
 hygiene).
 
 ---
+
+## License
+
+[MIT](LICENSE) — free to use, modify, and share, including for teaching.
 
 ## Credits
 
