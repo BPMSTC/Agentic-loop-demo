@@ -45,6 +45,11 @@ How to teach the four agentic loops with this repo. Pairs with Sydney Runkle's
 - "Level 1 always *finishes*. Finishing isn't the same as being *correct*."
 - Show the grade/retry cycle: attempt 1 fails, feedback goes back in, attempt 2
   passes. That outer loop is the whole point.
+- **Live mode caveat:** the real model usually passes on the *first* try, so the
+  loop won't visibly retry. Run with **`--strict`** (`python run_demo.py --strict`)
+  to raise the bar (plain prose, no markdown, explicit tradeoff) so the first
+  draft reliably fails and the class watches attempt 2 pass. Good teaching beat:
+  ask *why* a capable model still benefits from a loop it usually passes.
 - **Deterministic vs. agentic graders** (see the module docstring): we use an
   LLM-as-judge; the article's strongest example is deterministic (run tests).
   Ask: *when would you prefer each?*

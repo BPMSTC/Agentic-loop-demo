@@ -48,6 +48,21 @@ python run_demo.py --mock -y     # ...and don't pause between levels
 
 A loud `[MOCK MODE]` / `[LIVE MODE]` banner always tells you which one you're in.
 
+### Want to *see* the verification loop actually loop? Use `--strict`.
+
+In live mode the model is usually good enough to pass the grader on the first
+try, so Level 2 doesn't visibly retry. The `--strict` flag raises the grader's
+bar (plain prose, no markdown, plus an explicit tradeoff) so the first draft
+reliably fails and you watch attempt 2 pass — the loop, made visible:
+
+```bash
+python run_demo.py --strict          # live, with the visible fail->retry
+python level2_verification.py --strict "your topic"
+```
+
+It's off by default so normal runs stay realistic. (In mock mode the retry is
+always shown regardless.)
+
 ---
 
 ## Running the levels individually

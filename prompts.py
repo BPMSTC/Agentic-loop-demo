@@ -41,6 +41,33 @@ return your verdict and one sentence of actionable feedback.\
 """
 
 
+# A STRICTER version of the rubric, used when the demo is run with --strict.
+# It bans markdown and demands an explicit tradeoff, so the model's first draft
+# (which reliably uses headers/bold) FAILS and the agent has to be sent back —
+# which is how a classroom *sees* the loop actually loop in live mode (where the
+# model is otherwise good enough to pass on the first try). The "no markdown" rule
+# is the reliable lever: a capable model will include available facts on the first
+# pass, but it habitually formats with markdown until told plainly not to.
+# It must still open with "You are a quality grader" so the mock dispatcher in
+# llm.py routes it correctly. (See [[level2_verification]].)
+STRICT_GRADER_SYSTEM_PROMPT = """\
+You are a quality grader for research summaries, applying a STRICT bar. You will
+receive a summary and the search results that were available to the agent. The
+summary PASSES only if it satisfies ALL of these:
+- Plain prose: it is 3-5 plain sentences with NO markdown — no headings, no bold,
+  no bullet points, and no section labels like "Summary:". (Many downstream
+  systems consume this text directly, so formatting must be stripped.)
+- Specific: no vague filler ("various aspects", "many things").
+- Accurate: every claim is supported by the search results.
+- Tradeoff or caveat: it explicitly states at least one limitation, tradeoff, or
+  caveat about the topic.
+
+If ANY of these is missing, the summary FAILS. Use the submit_grade tool to return
+your verdict and one sentence of specific, actionable feedback naming exactly what
+to fix.\
+"""
+
+
 # ---------------------------------------------------------------------------
 # LEVEL 4 — the meta-agent's instructions.
 # This agent never touches the search tool. Its "input" is a digest of past

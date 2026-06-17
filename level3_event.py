@@ -19,6 +19,7 @@ Self-contained: run it directly, then drop a .txt file into watch_inbox/:
 """
 
 import os
+import sys
 import time
 
 from watchdog.events import FileSystemEventHandler
@@ -127,6 +128,12 @@ def start_observer():
 
 def main():
     """Run Level 3 on its own: watch the inbox until Ctrl+C."""
+    # --strict tightens the grader (shared with Level 2) so dropped-file runs
+    # usually fail once and retry — the verification loop, made visible.
+    if "--strict" in sys.argv:
+        import level2_verification
+        level2_verification.set_strict(True)
+
     print("=" * 70)
     print("LEVEL 3 — THE EVENT-DRIVEN LOOP")
     print("The agent runs in response to an event, not a human pressing 'run'.")

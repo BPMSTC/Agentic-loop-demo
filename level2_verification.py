@@ -40,15 +40,34 @@ sent back to improve:
     python level2_verification.py
 """
 
-import sys
+import argparse
 
 import llm
 from level1_agent import run_agent, write_trace
-from prompts import GRADER_SYSTEM_PROMPT
+from prompts import GRADER_SYSTEM_PROMPT, STRICT_GRADER_SYSTEM_PROMPT
 
 # How many times we'll send the agent back to improve before giving up. Like the
 # agent loop's cap, this keeps a stubborn run from looping (and billing) forever.
 MAX_RETRIES = 3
+
+# Strict mode raises the grader's bar (see STRICT_GRADER_SYSTEM_PROMPT). It's off
+# by default. We expose it as a module-level toggle so run_demo.py / the level
+# files can flip it with --strict, and so BOTH Level 2 and Level 3 (which grades
+# through this same function) pick it up. In live mode the model is usually good
+# enough to pass on the first try; strict mode reliably forces a fail-then-retry
+# so a classroom can watch the verification loop actually loop.
+_STRICT = False
+
+
+def set_strict(strict):
+    """Turn the stricter grading rubric on or off (used by the --strict flag)."""
+    global _STRICT
+    _STRICT = strict
+
+
+def _grader_system_prompt():
+    """Pick the normal or strict rubric depending on the toggle above."""
+    return STRICT_GRADER_SYSTEM_PROMPT if _STRICT else GRADER_SYSTEM_PROMPT
 
 # The grader's tool. Forcing the model to answer THROUGH a tool (instead of
 # free-form text we'd have to parse) guarantees we get clean, structured data:
@@ -118,7 +137,7 @@ def grade_summary(summary, search_results):
     )
 
     message = llm.create_message(
-        system=GRADER_SYSTEM_PROMPT,
+        system=_grader_system_prompt(),
         messages=[{"role": "user", "content": grader_input}],
         tools=[GRADER_TOOL],
         # Force the model to use submit_grade so we always get structured output.
@@ -184,13 +203,25 @@ def run_verified_agent(topic):
 
 def main():
     """Run Level 2 on its own so students can watch the grade/retry cycle."""
+    parser = argparse.ArgumentParser(description="Run the verification loop on a topic.")
+    parser.add_argument("topic", nargs="*", help="The research topic (optional).")
+    parser.add_argument(
+        "--strict", action="store_true",
+        help="Use the stricter rubric so the first draft usually fails and retries.",
+    )
+    args = parser.parse_args()
+    if args.strict:
+        set_strict(True)
+
     print("=" * 70)
     print("LEVEL 2 — THE VERIFICATION LOOP")
     print("Wrap the agent in a grader: finishing is not the same as being correct.")
     print(llm.mode_banner())
+    if _STRICT:
+        print("[GRADER] STRICT mode: requires plain prose (no markdown) AND a stated tradeoff.")
     print("=" * 70)
 
-    topic = " ".join(sys.argv[1:]) if len(sys.argv) > 1 else "What is a verification loop?"
+    topic = " ".join(args.topic) if args.topic else "What is a verification loop?"
     print(f"\nTopic: {topic}")
 
     result = run_verified_agent(topic)

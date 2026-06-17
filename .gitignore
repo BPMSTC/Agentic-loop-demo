@@ -1,5 +1,7 @@
-# Secrets — never commit your real key
+# Secrets — never commit your real key (.env.example stays as the template)
 .env
+.env.*
+!.env.example
 
 # Editor / harness local settings
 .claude/

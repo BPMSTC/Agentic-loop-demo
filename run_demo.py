@@ -58,6 +58,10 @@ def main():
         "-y", "--yes", action="store_true",
         help="Don't pause for Enter between levels (good for a hands-off run).",
     )
+    parser.add_argument(
+        "--strict", action="store_true",
+        help="Stricter grader so L2/L3 usually fail once and retry (visible loop).",
+    )
     args = parser.parse_args()
 
     if args.mock:
@@ -74,13 +78,22 @@ def main():
     print("    L1 Agent loop  ->  L2 Verification  ->  L3 Event-driven  ->  L4 Hill climbing")
     print()
     print("  " + llm.mode_banner())
+    if args.strict:
+        print("  [STRICT] Grader requires plain prose (no markdown) AND a stated tradeoff —")
+        print("           expect L2/L3 to fail once and retry (the loop, made visible).")
     print("=" * 70)
 
     # We import the levels AFTER setting mock mode so everything sees the choice.
     from level1_agent import run_agent, write_trace
+    import level2_verification
     from level2_verification import run_verified_agent
     import level3_event
     from level4_hill_climbing import run_hill_climbing
+
+    # Strict grading (if requested) applies to both L2 and L3, since L3 grades
+    # through the same verification function.
+    if args.strict:
+        level2_verification.set_strict(True)
 
     # ===================================================================
     # LEVEL 1 — the agent loop

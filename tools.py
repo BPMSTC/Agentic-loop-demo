@@ -31,13 +31,19 @@ _FAKE_RESULTS = {
         "answer. Crucially, the MODEL decides when to stop — the loop is open-ended, "
         "not a fixed number of steps. Sydney Runkle describes four levels: the agent "
         "loop, a verification loop that grades output, an event-driven loop triggered "
-        "by your systems, and a hill-climbing loop that improves the agent itself."
+        "by your systems, and a hill-climbing loop that improves the agent itself. "
+        "For example, a coding agent that repeatedly reads files, runs the tests, and "
+        "edits code until the tests pass is a simple agentic loop in action. One key "
+        "tradeoff is cost and latency: because the loop is open-ended it can call the "
+        "model many times, so production systems add a maximum-iteration cap as a guard."
     ),
     "verification": (
         "A verification loop wraps an agent with a grader that scores the output "
         "against a rubric. If the output fails, the feedback is sent back to the agent "
         "for another attempt. Graders can be deterministic (run tests) or agentic "
-        "('LLM as a judge'). The tradeoff is latency and cost per run in exchange for "
+        "('LLM as a judge'). For example, a documentation agent might run a grader "
+        "that checks every link resolves and all tests pass before a change is accepted. "
+        "The tradeoff is latency and cost per run in exchange for "
         "more consistent, correct results — worth it whenever quality matters more "
         "than raw speed, which covers most production use cases."
     ),
@@ -46,15 +52,20 @@ _FAKE_RESULTS = {
         "wired into a system — a new file lands, a webhook arrives, a schedule fires — "
         "and that event triggers the agent. This turns an agent from a script you run "
         "into a service that runs continuously inside a larger system, reacting to the "
-        "world as things happen."
+        "world as things happen. For example, dropping a file into a watched folder, a "
+        "GitHub webhook on a new pull request, or a nightly cron job can each fire the "
+        "agent automatically. One caveat is that an always-on agent needs guardrails so "
+        "it does not react to its own output or run unbounded."
     ),
     "hill climbing": (
         "A hill-climbing loop closes the loop on the loops: every agent run emits a "
         "trace of what it did, and a meta-agent analyzes those traces to improve the "
         "harness itself — usually by rewriting the system prompt or tweaking tools. "
         "Each generation of runs becomes training signal for the next, so the system "
-        "compounds: it gets better the more it is used. Human review before deploying "
-        "the improvement keeps a person in the loop."
+        "compounds: it gets better the more it is used. For example, after many runs a "
+        "meta-agent might notice the agent searches too many times and rewrite its "
+        "prompt to cap searches at three. One important caveat is that human review "
+        "before deploying the improvement keeps a person in the loop."
     ),
     "python": (
         "Python is a high-level, general-purpose programming language known for "
